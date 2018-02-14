@@ -1,0 +1,25 @@
+<robot name="simple_box">
+  <link name="blue_box">
+    <inertial>
+      <origin xyz="2 0 0" />
+      <mass value="1.0" />
+      <inertia  ixx="0.17" ixy="0.0"  ixz="0.0"  iyy="0.42"  iyz="0.0"  izz="0.42" />
+    </inertial>
+    <visual>
+      <origin xyz="2 0 1"/>
+      <geometry>
+        <box size="2 1 1" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="2 0 1"/>
+      <geometry>
+        <box size="2 1 1" />
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="blue_box">
+	<gravity>0</gravity>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+</robot>
