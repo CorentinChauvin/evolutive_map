@@ -9,14 +9,12 @@
 // C++
 #include <iostream>
 #include <fstream>
-#include <cmath>
 #include <string>
-#include <vector>
-#include <stdlib.h>
-#include <time.h>
+
 
 // ROS
-#include "ros/ros.h"
+#include <ros/ros.h>
+#include <ros/package.h>
 #include <tf/transform_datatypes.h>
 
 // Gazebo
@@ -79,7 +77,8 @@ int main (int argc, char** argv)
 	{
 		gazebo_msgs::SpawnModel sm;
 
-		std::ifstream file("/home/ecn/ros/src/evolutive_map/urdf/cube.urdf");
+		string filePath = ros::package::getPath("evolutive_map") + "/urdf/cube.urdf";
+		std::ifstream file(filePath.c_str());
 	  	std::string line;
 	 
 	   	while(!file.eof()) // Parse the contents of the given urdf in a string

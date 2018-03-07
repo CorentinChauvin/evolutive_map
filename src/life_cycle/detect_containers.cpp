@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ros/package.h>
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include "Container.h"
@@ -12,7 +13,7 @@ using namespace cv;
 int detect_containers(vector<Container>& listCont, int& nbContainers)
 {
 	//Open an image
-	string path = "evolutive_map/ressources/aerial_views/St_Nazaire_1.jpg";//argument?
+	string path = ros::package::getPath("evolutive_map") + "/ressources/aerial_views/St_Nazaire_1.jpg";
 	Mat image;
 	image = imread(path, CV_LOAD_IMAGE_COLOR); //open in colours
 	

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen"/>
+</launch>
