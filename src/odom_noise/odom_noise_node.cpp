@@ -19,7 +19,7 @@ ros::Publisher pub_noisedOdom, pub_diffOdom;
 nav_msgs::Odometry lastOdom, lastNoisedOdom;
 bool isOdomInialised = false;
 default_random_engine randomGenerator;  // Random generator for noises
-double alpha1=0.0001, alpha2=0.0001, alpha3=0.0001, alpha4=0.0001;
+double alpha1, alpha2, alpha3, alpha4;
 
 
 // Useful functions
@@ -96,13 +96,14 @@ void odom_callback(nav_msgs::Odometry odom)
 
         // Publish the noised odom
         noisedOdom.header.stamp = ros::Time::now();
-        //noisedOdom.child_frame_id = "base_footprint"; <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        noisedOdom.child_frame_id = "base_footprint";
 
         pub_noisedOdom.publish(noisedOdom);
 
         // Publish the difference between noised and true odom
         nav_msgs::Odometry diffOdom;
         diffOdom.header.stamp = ros::Time::now();
+        diffOdom.child_frame_id = "base_footprint";
         diffOdom.pose.pose.position.x = odom.pose.pose.position.x - noisedOdom.pose.pose.position.x;
         diffOdom.pose.pose.position.y = odom.pose.pose.position.y - noisedOdom.pose.pose.position.y;
         diffOdom.pose.pose.position.z = odom.pose.pose.position.z - noisedOdom.pose.pose.position.z;
@@ -116,169 +117,8 @@ void odom_callback(nav_msgs::Odometry odom)
         // Save the global variables
         lastOdom = odom;
         lastNoisedOdom = noisedOdom;
-
-        // TODO : essayer de generer l'odometrie a partir de /gazebo/model_states => theoriquement, petit bruit d'odometrie introduit par gazebo
-
-
-
-
-
     }
 }
-
-/*
-name: [bookshelf, jersey_barrier, ground_plane_0, unit_cylinder_1, Dumpster, mobile_base]
-pose:
-  -
-    position:
-      x: 0.0
-      y: 1.53026
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
-  -
-    position:
-      x: -4.0
-      y: -1.0
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: -0.342897807455
-      w: 0.939372712847
-  -
-    position:
-      x: 0.497681
-      y: 0.0
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
-  -
-    position:
-      x: -1.99999999999
-      y: -3.48880000005
-      z: 0.499120000039
-    orientation:
-      x: -2.22663668149e-11
-      y: -2.27691340047e-11
-      z: -7.46721789377e-10
-      w: 1.0
-  -
-    position:
-      x: 0.999999522584
-      y: -3.44458004744
-      z: 0.000783506610574
-    orientation:
-      x: 1.43255358577e-06
-      y: -0.000101977660203
-      z: 6.19666956736e-08
-      w: 0.999999994799
-  -
-    position:
-      x: -0.299766714827
-      y: -0.689234294939
-      z: -0.00113073179688
-    orientation:
-      x: 0.00366328708223
-      y: 0.00160241086105
-      z: 0.918528094487
-      w: -0.395335493278
-twist:
-  -
-    linear:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-  -
-    linear:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-  -
-    linear:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-  -
-    linear:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-  -
-    linear:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.0
-  -
-    linear:
-      x: 3.31031613028e-05
-      y: -8.78382811802e-05
-      z: 3.67016577692e-05
-    angular:
-      x: 0.000128963675904
-      y: 0.000356629034858
-      z: -0.00026078371632
----
-*/
-
-/*header:
-  seq: 35365
-  stamp:
-    secs: 353
-    nsecs: 950000000
-  frame_id: "odom"
-child_frame_id: "base_footprint"
-pose:
-  pose:
-    position:
-      x: 0.768396561567
-      y: -0.0770501053568
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: -0.0
-      z: 0.99979230311
-      w: -0.0203801531297
-  covariance: [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1000000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1000000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1000000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05]
-twist:
-  twist:
-    linear:
-      x: -1.21043981693e-05
-      y: 0.0
-      z: 0.0
-    angular:
-      x: 0.0
-      y: 0.0
-      z: 0.00154933941484
-  covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-*/
-
 
 
 int main(int argc, char** argv)
@@ -286,15 +126,21 @@ int main(int argc, char** argv)
     // ROS Initialisation
     ros::init(argc, argv, "package_template_node");
     ROS_INFO("Node package_template_node connected to roscore");
-    ros::NodeHandle nh_("~");//ROS Handler - local namespace.
+    ros::NodeHandle nh("~");//ROS Handler - local namespace.
 
     // Subscribing
     ROS_INFO("Subscribing to topics\n");
-    ros::Subscriber sub_odom = nh_.subscribe<nav_msgs::Odometry> ("/odom", 1, odom_callback);
+    ros::Subscriber sub_odom = nh.subscribe<nav_msgs::Odometry> ("/odom", 1, odom_callback);
 
     // Publishing
-    pub_noisedOdom = nh_.advertise<nav_msgs::Odometry>("/noisedOdom", 1);
-    pub_diffOdom = nh_.advertise<nav_msgs::Odometry>("/diffOdom", 1);
+    pub_noisedOdom = nh.advertise<nav_msgs::Odometry>("/noisedOdom", 1);
+    pub_diffOdom = nh.advertise<nav_msgs::Odometry>("/diffOdom", 1);
+
+	// Parameters
+	nh.param<double>("/alpha1", alpha1, 0.0);
+	nh.param<double>("/alpha2", alpha2, 0.0);
+	nh.param<double>("/alpha3", alpha3, 0.0);
+	nh.param<double>("/alpha4", alpha4, 0.0);
 
 
     ros::Rate rate(100);
