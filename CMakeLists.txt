@@ -28,4 +28,4 @@ add_executable(odom_noise src/odom_noise/odom_noise_node.cpp)
 
 target_link_libraries(life_cycle ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${OpenCV_LIBS})
 target_link_libraries(automove ${catkin_LIBRARIES})
-target_link_libraries(odom_noise ${catkin_LIBRARIES})
+target_link_libraries(odom_noise ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
