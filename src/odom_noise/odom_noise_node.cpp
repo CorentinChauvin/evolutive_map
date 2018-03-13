@@ -21,11 +21,7 @@ ros::Publisher pub_noisedOdom, pub_diffOdom, pub_groundTruthOdom;
 nav_msgs::Odometry odom, lastOdom, lastNoisedOdom;
 bool isOdomInialised = false;
 default_random_engine randomGenerator;  // Random generator for noises
-<<<<<<< 9b240f0093dcc6be89d3e4332bfde553957c9087
-double alpha1, alpha2, alpha3, alpha4;
-=======
 double alpha1, alpha2, alpha3, alpha4;  // Odometry noise parameters
->>>>>>> Try to base odometry noise on ground truth provided by Gazebo
 
 
 // Useful functions
@@ -38,6 +34,7 @@ double randomGaussianDouble(double a, double b) {
 // Callbacks
 void states_callback(gazebo_msgs::ModelStates modelStates) {
 	/* Get the odometry from the ground truth provided by gazebo
+       Also publish the ground truth odometry
 	*/
 
 	// Find the mobile_base in the modelStates message and fill odom with its ground truth values
@@ -105,14 +102,9 @@ void computeNoisedOdom() {
 
 		// Compute the new noised position from the real position difference
 		nav_msgs::Odometry noisedOdom;
-		noisedOdom.pose.pose.position.x = lastNoisedOdom.pose.pose.position.x + 1.000000001*noised_d_trans*cos(yawLastOdom+noised_d_rot1);
-		noisedOdom.pose.pose.position.y = lastNoisedOdom.pose.pose.position.y + 1.0*noised_d_trans*sin(yawLastOdom+noised_d_rot1);
+		noisedOdom.pose.pose.position.x = lastNoisedOdom.pose.pose.position.x + noised_d_trans*cos(yawLastOdom+noised_d_rot1);
+		noisedOdom.pose.pose.position.y = lastNoisedOdom.pose.pose.position.y + noised_d_trans*sin(yawLastOdom+noised_d_rot1);
 		noisedOdom.pose.pose.position.z = lastNoisedOdom.pose.pose.position.z;
-
-		/*cout << lastNoisedOdom.pose.pose.position.x - noisedOdom.pose.pose.position.x << " ; ";
-		cout << 1000.0*(odom.pose.pose.position.x - noisedOdom.pose.pose.position.x) << endl;*/
-		cout << 1000000000.0*(odom.pose.pose.position.x - noisedOdom.pose.pose.position.x) << " ; ";
-		cout << 1000000000.0*(odom.pose.pose.position.y - noisedOdom.pose.pose.position.y) << endl;
 
 		// Compute the new noised orientation from the real orientation difference
 		double yawNoisedOdom, yawLastNoisedOdom;
@@ -125,8 +117,6 @@ void computeNoisedOdom() {
 		quatNoisedOdom.setRPY(0.0, 0.0, yawNoisedOdom);
 		tf::quaternionTFToMsg(quatNoisedOdom, noisedOdom.pose.pose.orientation); // fill the message orientation field
 
-		// -> 0 => probleme de copie ????? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 		// Copy the speed of the real odometry
 		noisedOdom.twist = odom.twist;
 
@@ -136,8 +126,14 @@ void computeNoisedOdom() {
 		odom.header.stamp = ros::Time::now();
 		odom.child_frame_id = "base_footprint";
 
+        // Publish the noised and ground truth odometry
+        pub_noisedOdom.publish(noisedOdom);
+        pub_groundTruthOdom.publish(odom);
+
 		// Publish the difference between noised and true odom
 		nav_msgs::Odometry diffOdom;
+        diffOdom.header.stamp = ros::Time::now();
+		diffOdom.child_frame_id = "base_footprint";
 		diffOdom.pose.pose.position.x = odom.pose.pose.position.x - noisedOdom.pose.pose.position.x;
 		diffOdom.pose.pose.position.y = odom.pose.pose.position.y - noisedOdom.pose.pose.position.y;
 		diffOdom.pose.pose.position.z = odom.pose.pose.position.z - noisedOdom.pose.pose.position.z;
@@ -145,9 +141,7 @@ void computeNoisedOdom() {
 		diffOdom.pose.pose.orientation.y = odom.pose.pose.orientation.y - noisedOdom.pose.pose.orientation.y;
 		diffOdom.pose.pose.orientation.z = odom.pose.pose.orientation.z - noisedOdom.pose.pose.orientation.z;
 		diffOdom.pose.pose.orientation.w = odom.pose.pose.orientation.w - noisedOdom.pose.pose.orientation.w;
-
 		pub_diffOdom.publish(diffOdom);
-
 
 		// Save the global variables
 		lastOdom = odom;
@@ -173,10 +167,10 @@ int main(int argc, char** argv)
 	pub_groundTruthOdom = nh_.advertise<nav_msgs::Odometry>("/groundTruthOdom", 1);
 
 	// Parameters
-	nh_.param<double>("alpha1", alpha1, 0.0);
-	nh_.param<double>("alpha2", alpha2, 0.0);
-	nh_.param<double>("alpha3", alpha3, 0.0);
-	nh_.param<double>("alpha4", alpha4, 0.0);
+	nh_.param<double>("/alpha1", alpha1, 0.0);
+	nh_.param<double>("/alpha2", alpha2, 0.0);
+	nh_.param<double>("/alpha3", alpha3, 0.0);
+	nh_.param<double>("/alpha4", alpha4, 0.0);
 
 
 	ros::Rate rate(100);
