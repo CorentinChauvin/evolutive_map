@@ -1,5 +1,6 @@
 /*
- *
+ * Source code for the node odom_noise_node
+ * Get the ground truth pose of the robot provided by Gazebo and create a noised odometry
 */
 
 // Includes
@@ -10,7 +11,7 @@
 #include <ros/ros.h>
 #include <gazebo_msgs/ModelStates.h>
 #include <nav_msgs/Odometry.h>
-#include <tf/transform_broadcaster.h>
+#include <tf/transform_broadcaster.h>	// for quaternions
 
 
 // Namespaces
@@ -153,8 +154,8 @@ void computeNoisedOdom() {
 int main(int argc, char** argv)
 {
 	// ROS Initialisation
-	ros::init(argc, argv, "package_template_node");
-	ROS_INFO("Node package_template_node connected to roscore");
+	ros::init(argc, argv, "odom_noise_node");
+	ROS_INFO("Node odom_noise_node connected to roscore");
 	ros::NodeHandle nh_("~");//ROS Handler - local namespace.
 
 	// Subscribing
@@ -167,10 +168,10 @@ int main(int argc, char** argv)
 	pub_groundTruthOdom = nh_.advertise<nav_msgs::Odometry>("/groundTruthOdom", 1);
 
 	// Parameters
-	nh_.param<double>("/alpha1", alpha1, 0.0);
-	nh_.param<double>("/alpha2", alpha2, 0.0);
-	nh_.param<double>("/alpha3", alpha3, 0.0);
-	nh_.param<double>("/alpha4", alpha4, 0.0);
+	nh_.param<double>("alpha1", alpha1, 0.0);
+	nh_.param<double>("alpha2", alpha2, 0.0);
+	nh_.param<double>("alpha3", alpha3, 0.0);
+	nh_.param<double>("alpha4", alpha4, 0.0);
 
 
 	ros::Rate rate(100);

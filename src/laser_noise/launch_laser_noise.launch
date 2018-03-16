@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node name="laser_noise" type="laser_noise" pkg="evolutive_map" output="screen">
+		<param name="sigma" value="0.01" type="double" />
+	</node>
+</launch>

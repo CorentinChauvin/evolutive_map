@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 
 <launch>
-	<node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen"/>
-	<param name="alpha1" value="0.0005" type="double" />
-	<param name="alpha2" value="0.0005" type="double" />
-	<param name="alpha3" value="0.0005" type="double" />
-	<param name="alpha4" value="0.0005" type="double" />
+	<node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen">
+		<param name="alpha1" value="0.0005" type="double" />
+		<param name="alpha2" value="0.0005" type="double" />
+		<param name="alpha3" value="0.0005" type="double" />
+		<param name="alpha4" value="0.0005" type="double" />
+	</node>
 </launch>
