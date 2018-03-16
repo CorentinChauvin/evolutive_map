@@ -25,9 +25,11 @@ catkin_package(
 add_executable(life_cycle src/life_cycle/life_cycle.cpp src/life_cycle/Container.cpp src/life_cycle/detect_containers.cpp)
 add_executable(automove src/automove/automove.cpp)
 add_executable(odom_noise src/odom_noise/odom_noise_node.cpp)
+add_executable(calibrate_odom_noise src/odom_noise/calibrate_odom_noise_node.cpp)
 add_executable(laser_noise src/laser_noise/laser_noise_node.cpp)
 
 target_link_libraries(life_cycle ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${OpenCV_LIBS})
 target_link_libraries(automove ${catkin_LIBRARIES})
 target_link_libraries(odom_noise ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+target_link_libraries(calibrate_odom_noise ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 target_link_libraries(laser_noise ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})

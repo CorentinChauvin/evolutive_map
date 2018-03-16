@@ -37,7 +37,6 @@ void scan_callback(sensor_msgs::LaserScan scan) {
 		double range = scan.ranges[i];
 
 		if (range == range) {	// Ensure that range is not NaN
-			cout << "range : " << range << endl;
 			if (range < 1.0)
 				noisedScan.ranges[i] += randomGaussianDouble(0, sigma);
 			else
@@ -69,7 +68,6 @@ int main(int argc, char** argv)
 	ros::NodeHandle nh_("~");//ROS Handler - local namespace.
 
 	// Subscribing
-	ROS_INFO("Subscribing to topics\n");
 	ros::Subscriber sub_scan = nh_.subscribe<sensor_msgs::LaserScan>("/scan", 1, scan_callback);
 
 	// Publishing

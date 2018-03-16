@@ -138,10 +138,16 @@ void computeNoisedOdom() {
 		diffOdom.pose.pose.position.x = odom.pose.pose.position.x - noisedOdom.pose.pose.position.x;
 		diffOdom.pose.pose.position.y = odom.pose.pose.position.y - noisedOdom.pose.pose.position.y;
 		diffOdom.pose.pose.position.z = odom.pose.pose.position.z - noisedOdom.pose.pose.position.z;
-		diffOdom.pose.pose.orientation.x = odom.pose.pose.orientation.x - noisedOdom.pose.pose.orientation.x;
-		diffOdom.pose.pose.orientation.y = odom.pose.pose.orientation.y - noisedOdom.pose.pose.orientation.y;
-		diffOdom.pose.pose.orientation.z = odom.pose.pose.orientation.z - noisedOdom.pose.pose.orientation.z;
-		diffOdom.pose.pose.orientation.w = odom.pose.pose.orientation.w - noisedOdom.pose.pose.orientation.w;
+
+		double yaw1, yaw2;
+	    tf::Quaternion quat1, quat2, quatDiffOdom;
+	    tf::quaternionMsgToTF(odom.pose.pose.orientation, quat1);
+	    tf::quaternionMsgToTF(noisedOdom.pose.pose.orientation, quat2);
+	    tf::Matrix3x3(quat1).getRPY(foo, foo, yaw1);
+	    tf::Matrix3x3(quat2).getRPY(foo, foo, yaw2);
+		quatDiffOdom.setRPY(0.0, 0.0, yaw1-yaw2);
+		tf::quaternionTFToMsg(quatDiffOdom, diffOdom.pose.pose.orientation);
+
 		pub_diffOdom.publish(diffOdom);
 
 		// Save the global variables
@@ -159,7 +165,6 @@ int main(int argc, char** argv)
 	ros::NodeHandle nh_("~");//ROS Handler - local namespace.
 
 	// Subscribing
-	ROS_INFO("Subscribing to topics\n");
 	ros::Subscriber sub_states = nh_.subscribe<gazebo_msgs::ModelStates>("/gazebo/model_states", 1, states_callback);
 
 	// Publishing
