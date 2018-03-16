@@ -1,22 +1,27 @@
 <!-- Launch gmapping and move_base -->
 
 <launch>
-    <!-- gmapping -->
-  <arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
-  <include file="$(find evolutive_map)/launch/includes/gmapping.launch.xml"/>
+	<!-- gmapping -->
+	<arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
+	<include file="$(find evolutive_map)/launch/includes/gmapping.launch.xml"/>
 
-  <!-- noising sensors -->
-  <node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen">
-      <param name="alpha1" value="0.0005" type="double" />
-      <param name="alpha2" value="0.0005" type="double" />
-      <param name="alpha3" value="0.0005" type="double" />
-      <param name="alpha4" value="0.0005" type="double" />
-  </node>
-  <node name="laser_noise" type="laser_noise" pkg="evolutive_map" output="screen">
-      <param name="sigma" value="0.01" type="double" />
-  </node>
+	<!-- noising sensors -->
+	<node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen">
+		<param name="alpha1" value="0.0005" type="double" />
+		<param name="alpha2" value="0.0005" type="double" />
+		<param name="alpha3" value="0.0005" type="double" />
+		<param name="alpha4" value="0.0005" type="double" />
+	</node>
+	<node name="laser_noise" type="laser_noise" pkg="evolutive_map" output="screen">
+		<param name="sigma" value="0.01" type="double" />
+	</node>
 
+	<!-- move_base -->
+	<include file="$(find evolutive_map)/launch/includes/move_base.launch.xml"/>
 
-  <!-- move_base -->
-  <include file="$(find evolutive_map)/launch/includes/move_base.launch.xml"/>
+	<!-- map_saver -->
+	<node name="maps_saver" type="maps_saver" pkg="evolutive_map" output="screen">
+		<param name="delay" value="30.0" type="double" />
+		<param name="path" value="/tmp/maps/" type="string" />
+	</node>
 </launch>
