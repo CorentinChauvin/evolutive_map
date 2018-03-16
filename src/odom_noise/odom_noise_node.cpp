@@ -123,8 +123,10 @@ void computeNoisedOdom() {
 
 		// Set headers
 		noisedOdom.header.stamp = ros::Time::now();
+		noisedOdom.header.frame_id = "odom";
 		noisedOdom.child_frame_id = "base_footprint";
 		odom.header.stamp = ros::Time::now();
+		odom.header.frame_id = "odom";
 		odom.child_frame_id = "base_footprint";
 
         // Publish the noised and ground truth odometry
@@ -134,6 +136,7 @@ void computeNoisedOdom() {
 		// Publish the difference between noised and true odom
 		nav_msgs::Odometry diffOdom;
         diffOdom.header.stamp = ros::Time::now();
+		diffOdom.header.frame_id = "odom";
 		diffOdom.child_frame_id = "base_footprint";
 		diffOdom.pose.pose.position.x = odom.pose.pose.position.x - noisedOdom.pose.pose.position.x;
 		diffOdom.pose.pose.position.y = odom.pose.pose.position.y - noisedOdom.pose.pose.position.y;
