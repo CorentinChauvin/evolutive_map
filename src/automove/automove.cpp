@@ -39,9 +39,9 @@ int main (int argc, char** argv)
     ros::NodeHandle nh_("~");//ROS Handler - local namespace.
     
     
-    Point goal1 = {0.0, 0.0};
-    Point goal2 = {5.0, 5.0};
-    Point goal3 = {3.0, -7.0};
+    Point goal1 = {2.0, -2.0};
+    Point goal2 = {-10.0, 14.0};
+    Point goal3 = {10.0, 10.0};
     Point goalList[3] = { goal1, goal2, goal3 };
     int index_goal = 0;
     int nbrLoops = 0;
@@ -83,10 +83,10 @@ int main (int argc, char** argv)
 			ROS_INFO("Goal achieved, moving on.");
 			index_goal++;
 		}
-		else
+		else if(ac.getState() == actionlib::SimpleClientGoalState::ABORTED)
 		{
 			ROS_INFO("Goal not reached, moving on to the next anyways...");
-			index_goal++; //ou pas?
+			index_goal++;
 		}
 
 			
