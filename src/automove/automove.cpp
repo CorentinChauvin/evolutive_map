@@ -37,15 +37,18 @@ int main (int argc, char** argv)
     ros::init(argc, argv, "evolutive_map");
     ROS_INFO("Node evolutive_map connected to roscore");
     ros::NodeHandle nh_("~");//ROS Handler - local namespace.
-    
-    
-    Point goal1 = {2.0, -2.0};
-    Point goal2 = {-10.0, 14.0};
-    Point goal3 = {10.0, 10.0};
-    Point goalList[3] = { goal1, goal2, goal3 };
+
+
+    Point goal1 = {13.8, 0.0};
+    Point goal2 = {13.8, 5.0};
+    Point goal3 = {0.0, 5.0};
+    Point goal4 = {-9.0, 5.0};
+    Point goal5 = {-9.0, 0.0};
+    Point goal6 = {0.0, 0.0};
+    Point goalList[6] = {goal1, goal2, goal3, goal4, goal5, goal6};
     int index_goal = 0;
     int nbrLoops = 0;
-    
+
 	//tell the action client that we want to spin a thread by default
 	MoveBaseClient ac("move_base", true);
 
@@ -53,7 +56,7 @@ int main (int argc, char** argv)
 	while(!ac.waitForServer(ros::Duration(5.0))){
 		ROS_INFO("Waiting for the move_base action server to come up");
 	}
-	
+
     ros::Rate rate(100);
     while (ros::ok())
     {
@@ -89,19 +92,19 @@ int main (int argc, char** argv)
 			index_goal++;
 		}
 
-			
-		if (index_goal == 3){
+
+		if (index_goal == 6){
 			index_goal = 0;
 			nbrLoops++;
 		}
 
 		rate.sleep();
-    
+
     }
 
     ROS_INFO("ROS-Node Terminated\n");
-    
+
     cout << "Turtlebot stopped after successfully realising " << nbrLoops << " loops." << endl;
-    
+
     return 0;
 }

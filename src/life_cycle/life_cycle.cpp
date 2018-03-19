@@ -28,13 +28,12 @@
 #include "detect_containers.h"
 
 
-
 //Namespaces
 using namespace std;
 
-
 // Global variables
 //ros::Publisher a_publisher; //si on veut s'en servir dans un callback par exemple
+string mapImagePath;
 
 
 // Callbacks
@@ -45,18 +44,10 @@ using namespace std;
 
 int main (int argc, char** argv)
 {
-	srand(time(NULL));
-	int nbContainers = 0; //attention c'est le nbr total de conteneur spawn depuis le debut, ceux delete y compris! Le nbr courant de conteneurs est listeContainers.size()
-	int signs[2] = {-1, 1};
-	vector<Container> listContainers;
-
-	detect_containers(listContainers, nbContainers);
-
 	// ROS Initialization
     ros::init(argc, argv, "life_cycle");
     ROS_INFO("Node life_cycle connected to roscore");
     ros::NodeHandle nh_("~");//ROS Handler - local namespace.
-
 
     // Subscribing
     //ROS_INFO("Subscribing to topics\n");
@@ -64,31 +55,44 @@ int main (int argc, char** argv)
     // Parameter
     //nh_.param<[the param type]>("my_param_name_in_ROS", my_param_variable, [default_value]);//my_param_variable=variable in my functions
 
+	// Parameters
+	nh_.param<string>("mapImagePath", mapImagePath, "");
+
+	// Services
+	ros::ServiceClient gazebo_spawn_clt= nh_.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_urdf_model");
+
 
 	int maplimits = 40; //a passer en parametre plus tard?
 	maplimits*=2; //on redivisera par 2 après le tirage aleatoire de la position
 	//pour avoir un pas de 0.5m
 
-	// Initialiser le monde:
-	ros::ServiceClient gazebo_spawn_clt= nh_.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_urdf_model");
 
+	// Container urdf loading
+	string urdfPath = ros::package::getPath("evolutive_map") + "/urdf/cube.urdf";
+	ifstream file(urdfPath.c_str());
+
+	string line;
+	gazebo_msgs::SpawnModel sm;
+
+	while(!file.eof()) // Parse the contents of the given urdf in a string
+	{
+	  std::getline(file,line);
+	  sm.request.model_xml+=line;
+	}
+	file.close();
+
+	// Loading the map from the image
+	srand(time(NULL));
+	int nbContainers = 0; //attention c'est le nbr total de conteneur spawn depuis le debut, ceux delete y compris! Le nbr courant de conteneurs est listeContainers.size()
+	int signs[2] = {-1, 1};
+	vector<Container> listContainers;
+
+	detect_containers(listContainers, nbContainers, mapImagePath);
+
+	// Map generation
     ros::Duration(10).sleep(); // sleep for 10 seconds
 
-	for (int i=0; i<nbContainers; i++)
-	{
-		gazebo_msgs::SpawnModel sm;
-
-		string urdfPath = ros::package::getPath("evolutive_map") + "/urdf/cube.urdf";
-		ifstream file(urdfPath.c_str());
-	  	string line;
-
-	   	while(!file.eof()) // Parse the contents of the given urdf in a string
-		{
-		  std::getline(file,line);
-		  sm.request.model_xml+=line;
-		}
-	  	file.close();
-
+	for (int i=0; i<nbContainers; i++) {
 		Container new_cont = listContainers[i];
 
 		sm.request.model_name = new_cont.getName();
@@ -100,9 +104,26 @@ int main (int argc, char** argv)
 
 	  	if (gazebo_spawn_clt.call(sm)) //Call the spawn service
 	  		cout << i << ": Initial container spawned !  " << new_cont << endl;
-
 	}
+
 	cout << "Map initialised with success!" << endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/*
 	ros::Duration(180).sleep();//pause 3min
 
