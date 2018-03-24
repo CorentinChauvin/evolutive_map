@@ -2,28 +2,38 @@
 
 <launch>
 	<!-- gmapping -->
-	<arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
-	<include file="$(find evolutive_map)/launch/includes/gmapping.launch.xml"/>
+	<arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>
+	<include file="$(find evolutive_map)/launch/includes/gmapping.launch.xml">
+		<arg name="scan_topic"  value="noisedScan" />
+	    <arg name="base_frame"  value="base_footprint"/>
+	    <arg name="odom_frame"  value="odom"/>
+	</include>
 
 	<!-- noising sensors -->
 	<node name="odom_noise" type="odom_noise" pkg="evolutive_map" output="screen">
-		<param name="alpha1" value="0.000" type="double" /> <!-- 0.0005 -->
-		<param name="alpha2" value="0.000" type="double" /> <!-- 0.0005 -->
-		<param name="alpha3" value="0.000" type="double" /> <!-- 0.0005 -->
-		<param name="alpha4" value="0.000" type="double" /> <!-- 0.0005 -->
+		<param name="alpha1" value="0.0005" type="double" /> <!-- 0.0005 -->
+		<param name="alpha2" value="0.0005" type="double" /> <!-- 0.0005 -->
+		<param name="alpha3" value="0.0005" type="double" /> <!-- 0.0005 -->
+		<param name="alpha4" value="0.0005" type="double" /> <!-- 0.0005 -->
 	</node>
 	<node name="laser_noise" type="laser_noise" pkg="evolutive_map" output="screen">
-		<param name="sigma" value="0.0" type="double" /> <!-- 0.01 -->
+		<param name="sigma" value="0.01" type="double" /> <!-- 0.01 -->
 	</node>
 
 	<!-- move_base -->
-	<include file="$(find evolutive_map)/launch/includes/move_base.launch.xml"/>
+	<include file="$(find evolutive_map)/launch/includes/move_base.launch.xml">
+		<arg name="odom_frame_id"   value="odom"/>
+		<arg name="base_frame_id"   value="base_footprint"/>
+		<arg name="global_frame_id" value="map"/>
+		<arg name="laser_topic"     value="noisedScan" />
+		<arg name="odom_topic"     	value="odom" />
+	</include>
 
 	<!-- map_saver -->
-	<node name="maps_saver" type="maps_saver" pkg="evolutive_map" output="screen">
+	<!-- <node name="maps_saver" type="maps_saver" pkg="evolutive_map" output="screen">
 		<param name="delay" value="30.0" type="double" />
-		<param name="path" value="/tmp/maps/" type="string" />
-	</node>
+		<param name="path" value="/tmp/maps/exp1/" type="string" />
+	</node> -->
 
 	<!-- automove -->
 	<node name="automove" type="automove" pkg="evolutive_map" output="screen"/>
