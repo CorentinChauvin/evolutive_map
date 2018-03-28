@@ -2,11 +2,11 @@
 	<!-- Gazebo world -->
 	<arg name="world_file"  default="$(find evolutive_map)/worlds/empty.world"/>
 
-	<arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> <!-- create, roomba -->
-	<arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 -->
+	<arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/>
+	<arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>
 	<arg name="gui" default="true"/>
-	<arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
-	<arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
+	<arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>
+	<arg name="3d_sensor" value="kinect"/>  <!-- kinect or hokuyo $(optenv TURTLEBOT_3D_SENSOR hokuyo) -->
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<arg name="use_sim_time" value="true"/>
@@ -16,7 +16,7 @@
 	</include>
 
 	<!-- Turtlebot -->
-	<include file="$(find turtlebot_gazebo)/launch/includes/$(arg base).launch.xml">
+	<include file="$(find evolutive_map)/launch/includes/kobuki.launch.xml">
 		<arg name="base" value="$(arg base)"/>
 		<arg name="stacks" value="$(arg stacks)"/>
 		<arg name="3d_sensor" value="$(arg 3d_sensor)"/>
@@ -40,5 +40,10 @@
 	<!-- life_cycle -->
 	<node name="life_cycle" type="life_cycle" pkg="evolutive_map" output="screen">
 		<param name="mapImagePath" type="string" value="ressources/aerial_views/ExperimentMap_medium.jpg"/>
+		<param name="maplimits" value="40"/>
+		<param name="minsleeptime" value="5.0"/>
+		<param name="randsleeptime" value="0.0"/>
+		<param name="leftoversRatio" value="0.1"/>
+		<param name="securitySpawningDistance" value="2.0"/>
 	</node>
 </launch>
