@@ -8,8 +8,8 @@ class Container
 {
 	public:
 
-	Container(double x, double y, double z, double yaw, std::string nom);
-	void afficher(std::ostream &flux) const;
+	Container(double x, double y, double z, double yaw, std::string name);
+	void display(std::ostream &flux) const;
 	std::string getName();
 	double getX();
 	double getY();
@@ -21,7 +21,7 @@ class Container
 	double m_y;
 	double m_z;
 	double m_yaw;
-	std::string m_nom;
+	std::string m_name;
 
     friend std::ostream& operator<<(std::ostream& flux, Container const& cont);
 };

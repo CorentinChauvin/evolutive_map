@@ -1,7 +1,8 @@
-/**
- * Fait apparaitre et disparaitre des contenaires sur la map du robot. Il faut verifier qu'on les fait bien spawn:
- * Pas sur le robot, pas sur un autre element de decor ni hors-map.
-**/
+/*
+ * Source code for the node life_cycle
+ * Spawn and delete containers on the map. Have to be careful of the environment and the robot to prevent spawning
+ * at wrong places.
+*/
 
 // C++
 #include <iostream>
@@ -141,7 +142,7 @@ int main (int argc, char** argv)
 
     while (ros::ok())
     {
-        double sleeptime = 5.0; // randsleeptime*rand()/RAND_MAX + minsleeptime;
+        double sleeptime = randsleeptime*rand()/RAND_MAX + minsleeptime;
         ros::Duration(sleeptime).sleep(); // sleep for minsleeptime to minsleeptime + randsleeptime seconds
 		ros::spinOnce();
 

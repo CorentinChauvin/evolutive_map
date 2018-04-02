@@ -1,5 +1,6 @@
 /*
- *
+ * Source code for the node map_saver
+ * Save regularly the map in images
 */
 
 // Includes

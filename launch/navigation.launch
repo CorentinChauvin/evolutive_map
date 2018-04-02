@@ -30,10 +30,10 @@
 	</include>
 
 	<!-- map_saver -->
-	<!-- <node name="maps_saver" type="maps_saver" pkg="evolutive_map" output="screen">
+	<node name="maps_saver" type="maps_saver" pkg="evolutive_map" output="screen">
 		<param name="delay" value="30.0" type="double" />
-		<param name="path" value="/tmp/maps/exp1/" type="string" />
-	</node> -->
+		<param name="path" value="/tmp/maps/exp2/" type="string" />
+	</node>
 
 	<!-- automove -->
 	<node name="automove" type="automove" pkg="evolutive_map" output="screen"/>

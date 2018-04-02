@@ -40,7 +40,7 @@ void scan_callback(sensor_msgs::LaserScan scan) {
 			if (range < 1.0)
 				noisedScan.ranges[i] += randomGaussianDouble(0, sigma);
 			else
-				noisedScan.ranges[i] += randomGaussianDouble(0, 0.01*abs(range));
+				noisedScan.ranges[i] += randomGaussianDouble(0, sigma*abs(range));
 		}
 	}
 

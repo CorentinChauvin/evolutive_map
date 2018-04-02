@@ -4,13 +4,13 @@
 
 using namespace std;
 
-Container::Container(double x, double y, double z, double yaw, std::string nom): m_x(x), m_y(y), m_z(z), m_yaw(yaw), m_nom(nom)
+Container::Container(double x, double y, double z, double yaw, std::string name): m_x(x), m_y(y), m_z(z), m_yaw(yaw), m_name(name)
 {
 }
 
 string Container::getName()
 {
-	return m_nom;
+	return m_name;
 }
 
 double Container::getX()
@@ -28,13 +28,13 @@ double Container::getYaw()
 	return m_yaw;
 }
 
-void Container::afficher(ostream &flux) const
+void Container::display(ostream &flux) const
 {
-    flux << "  -nom:" << m_nom << "  -x:" << m_x << "  -y:" << m_y << "  -z:" << m_z << "  -yaw:" << m_yaw;
+    flux << "  -name:" << m_name << "  -x:" << m_x << "  -y:" << m_y << "  -z:" << m_z << "  -yaw:" << m_yaw;
 }
 
 ostream& operator<<(ostream &flux, Container const& cont)
 {
-    cont.afficher(flux);
+    cont.display(flux);
     return flux;
 }

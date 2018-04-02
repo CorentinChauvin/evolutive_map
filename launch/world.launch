@@ -6,7 +6,7 @@
 	<arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>
 	<arg name="gui" default="true"/>
 	<arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>
-	<arg name="3d_sensor" value="kinect"/>  <!-- kinect or hokuyo $(optenv TURTLEBOT_3D_SENSOR hokuyo) -->
+	<arg name="3d_sensor" value="kinect"/>  <!-- kinect or hokuyo -->
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<arg name="use_sim_time" value="true"/>
@@ -41,8 +41,8 @@
 	<node name="life_cycle" type="life_cycle" pkg="evolutive_map" output="screen">
 		<param name="mapImagePath" type="string" value="ressources/aerial_views/ExperimentMap_medium.jpg"/>
 		<param name="maplimits" value="40"/>
-		<param name="minsleeptime" value="5.0"/>
-		<param name="randsleeptime" value="0.0"/>
+		<param name="minsleeptime" value="40.0"/> <!-- 60 -->
+		<param name="randsleeptime" value="80.0"/> <!-- 120 -->
 		<param name="leftoversRatio" value="0.1"/>
 		<param name="securitySpawningDistance" value="2.0"/>
 	</node>

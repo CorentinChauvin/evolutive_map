@@ -1,6 +1,7 @@
-/**
+/*
+ * Source code for the node automove
  * Provides a circuit to the robot
-**/
+*/
 
 // Constants
 #define PI 3.14159265359

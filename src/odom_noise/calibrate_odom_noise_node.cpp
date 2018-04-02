@@ -1,5 +1,6 @@
 /*
- *
+ * Source code for the node calibrate_odom_noise_node
+ * Performs a straight line (1m) and a half-turn
 */
 
 // Includes
@@ -32,7 +33,7 @@ void diffOdom_callback(nav_msgs::Odometry diffOdom) {
 }
 
 // Other functions
-double cartesianDistance(nav_msgs::Odometry odom1, nav_msgs::Odometry odom2) {
+double euclidianDistance(nav_msgs::Odometry odom1, nav_msgs::Odometry odom2) {
     /* Compute the cartesian distance between two odometry poses (in the (x,y) plan)
     */
     double diff_x = odom1.pose.pose.position.x - odom2.pose.pose.position.x;
@@ -64,7 +65,7 @@ void goForward() {
         initialDiffOdom = lastDiffOdom;
         isForwardInitialised = true;
         cout << "Begining to move forward" << endl;
-    } else if (cartesianDistance(lastOdom, initialOdom) < 1.0) {
+    } else if (euclidianDistance(lastOdom, initialOdom) < 1.0) {
         // The robot has not moved enough : send the move forward command
         geometry_msgs::Twist command;
         command.linear.y = command.angular.z = 0;

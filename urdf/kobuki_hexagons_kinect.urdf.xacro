@@ -8,7 +8,7 @@
 	<xacro:include filename="$(find turtlebot_description)/urdf/turtlebot_common_library.urdf.xacro" />
 	<xacro:include filename="$(find kobuki_description)/urdf/kobuki.urdf.xacro" />
 	<xacro:include filename="$(find turtlebot_description)/urdf/stacks/hexagons.urdf.xacro"/>
-	<xacro:include filename="$(find turtlebot_description)/urdf/sensors/kinect.urdf.xacro"/>
+	<xacro:include filename="$(find evolutive_map)/urdf/kinect.urdf.xacro"/>
 
 	<kobuki/>
 	<stack_hexagons parent="base_link"/>
